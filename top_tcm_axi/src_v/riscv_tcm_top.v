@@ -47,7 +47,7 @@ module riscv_tcm_top
 // Params
 //-----------------------------------------------------------------
 #(
-     parameter BOOT_VECTOR      = 32'h00002000
+     parameter BOOT_VECTOR      = 32'h00000000
     ,parameter CORE_ID          = 0
     ,parameter TCM_MEM_BASE     = 0
     ,parameter MEM_CACHE_ADDR_MIN = 0
@@ -69,6 +69,7 @@ module riscv_tcm_top
     ,input           axi_i_rvalid_i
     ,input  [ 31:0]  axi_i_rdata_i
     ,input  [  1:0]  axi_i_rresp_i
+    
     ,input           axi_t_awvalid_i
     ,input  [ 31:0]  axi_t_awaddr_i
     ,input  [  3:0]  axi_t_awid_i
@@ -79,6 +80,7 @@ module riscv_tcm_top
     ,input  [  3:0]  axi_t_wstrb_i
     ,input           axi_t_wlast_i
     ,input           axi_t_bready_i
+
     ,input           axi_t_arvalid_i
     ,input  [ 31:0]  axi_t_araddr_i
     ,input  [  3:0]  axi_t_arid_i
@@ -108,6 +110,7 @@ module riscv_tcm_top
     ,output [  1:0]  axi_t_rresp_o
     ,output [  3:0]  axi_t_rid_o
     ,output          axi_t_rlast_o
+    ,output [31:0]   reg1_final
 );
 
 wire  [ 31:0]  ifetch_pc_w;
@@ -162,7 +165,7 @@ wire  [  3:0]  dport_axi_wr_w;
 wire           dport_axi_flush_w;
 wire           dport_tcm_error_w;
 wire           dport_accept_w;
-
+wire [31:0]    reg1;
 
 riscv_core
 #(
@@ -201,9 +204,10 @@ u_core
     ,.mem_i_flush_o(ifetch_flush_w)
     ,.mem_i_invalidate_o(ifetch_invalidate_w)
     ,.mem_i_pc_o(ifetch_pc_w)
+    ,.reg1_o(reg1)
 );
 
-
+assign reg1_final = reg1;
 dport_mux
 #(
      .TCM_MEM_BASE(TCM_MEM_BASE)

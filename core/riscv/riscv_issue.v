@@ -149,6 +149,7 @@ module riscv_issue
     ,output          exec_hold_o
     ,output          mul_hold_o
     ,output          interrupt_inhibit_o
+    ,output [31:0]   reg1_contents
 );
 
 
@@ -426,7 +427,7 @@ wire [31:0] issue_ra_value_w;
 wire [31:0] issue_rb_value_w;
 wire [31:0] issue_b_ra_value_w;
 wire [31:0] issue_b_rb_value_w;
-
+wire [31:0] reg1_value_w;
 // Register file: 1W2R
 riscv_regfile
 #(
@@ -445,7 +446,8 @@ u_regfile
     .ra0_i(issue_ra_idx_w),
     .rb0_i(issue_rb_idx_w),
     .ra0_value_o(issue_ra_value_w),
-    .rb0_value_o(issue_rb_value_w)
+    .rb0_value_o(issue_rb_value_w),
+    .reg1(reg1_value_w)
 );
 
 //-------------------------------------------------------------
@@ -532,7 +534,8 @@ assign csr_opcode_ra_operand_o  = opcode_ra_operand_o;
 assign csr_opcode_rb_operand_o  = opcode_rb_operand_o;
 assign csr_opcode_invalid_o     = opcode_issue_r && issue_invalid_w;
 
-
+// stuff we defined
+assign reg1_contents = reg1_value_w;
 //-------------------------------------------------------------
 // Checker Interface
 //-------------------------------------------------------------

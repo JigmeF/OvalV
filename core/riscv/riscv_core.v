@@ -88,6 +88,7 @@ module riscv_core
     ,output          mem_i_flush_o
     ,output          mem_i_invalidate_o
     ,output [ 31:0]  mem_i_pc_o
+    ,output [ 31:0]  reg1_o
 );
 
 wire           mmu_lsu_writeback_w;
@@ -219,7 +220,7 @@ wire  [  4:0]  lsu_opcode_ra_idx_w;
 wire  [ 31:0]  csr_writeback_exception_pc_w;
 wire           mmu_store_fault_w;
 wire           branch_exec_is_call_w;
-
+wire  [31:0]   reg1;
 
 riscv_exec
 u_exec
@@ -600,8 +601,9 @@ u_issue
     ,.exec_hold_o(exec_hold_w)
     ,.mul_hold_o(mul_hold_w)
     ,.interrupt_inhibit_o(interrupt_inhibit_w)
+    ,.reg1_contents(reg1)
 );
-
+assign reg1_o = reg1;
 
 riscv_fetch
 #(

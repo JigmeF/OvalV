@@ -68,12 +68,27 @@ module tcm_mem_ram
 // Mode: Read First
 //-----------------------------------------------------------------
 /* verilator lint_off MULTIDRIVEN */
-reg [31:0]   ram [16383:0] /*verilator public*/;
+//reg [31:0]   ram [16383:0] /*verilator public*/;
 /* verilator lint_on MULTIDRIVEN */
+reg [31:0]   ram [4:0];
+
+// initializing our ram with a test program
+localparam [13:0] boot_addr = 14'b00000000000000;
+localparam [13:0] boot_addr_1 = boot_addr + 1;
+localparam [13:0] boot_addr_2 = boot_addr_1 + 1;
+
 
 reg [31:0] ram_read0_q;
 reg [31:0] ram_read1_q;
 
+always @ (posedge rst0_i)
+begin
+    if (rst0_i) begin
+        ram[boot_addr][31:0] <= 32'b00000000000100000000000010010011;   //addi x1, x0, 1
+        ram[boot_addr_1][31:0] <= 32'b00000000000100001000000100110011; //addr x2, x1, x1
+        ram[boot_addr_2][31:0] <= 32'b00000000001000001000000110110011; //addr x3, x2, x1
+    end 
+end
 
 // Synchronous write
 always @ (posedge clk0_i)

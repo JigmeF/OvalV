@@ -57,9 +57,15 @@ module riscv_regfile
     ,input  [  4:0]  ra0_i
     ,input  [  4:0]  rb0_i
 
+    ,input  [4:0]  sw
+    ,input  [3:0]   btn
+
     // Outputs
     ,output [ 31:0]  ra0_value_o
     ,output [ 31:0]  rb0_value_o
+
+    ,output [15:0] led
+    ,output [31:0] reg1
 );
 
 //-----------------------------------------------------------------
@@ -236,6 +242,7 @@ begin: REGFILE
     //-----------------------------------------------------------------
     reg [31:0] ra0_value_r;
     reg [31:0] rb0_value_r;
+    reg [15:0] reg_to_led;
     always @ *
     begin
         case (ra0_i)
@@ -307,11 +314,88 @@ begin: REGFILE
         5'd31: rb0_value_r = reg_r31_q;
         default : rb0_value_r = 32'h00000000;
         endcase
+
+        case(btn[1])
+            1'd0: begin
+                case (sw)
+                    5'd1:       reg_to_led = reg_r1_q[15:0];
+                    5'd2:       reg_to_led = reg_r2_q[15:0];
+                    5'd3:       reg_to_led = reg_r3_q[15:0];
+                    5'd4:       reg_to_led = reg_r4_q[15:0];
+                    5'd5:       reg_to_led = reg_r5_q[15:0];
+                    5'd6:       reg_to_led = reg_r6_q[15:0];
+                    5'd7:       reg_to_led = reg_r7_q[15:0];
+                    5'd8:       reg_to_led = reg_r8_q[15:0];
+                    5'd9:       reg_to_led = reg_r9_q[15:0];
+                    5'd10:      reg_to_led = reg_r10_q[15:0];
+                    5'd11:      reg_to_led = reg_r11_q[15:0];
+                    5'd12:      reg_to_led = reg_r12_q[15:0];
+                    5'd13:      reg_to_led = reg_r13_q[15:0];
+                    5'd14:      reg_to_led = reg_r14_q[15:0];
+                    5'd15:      reg_to_led = reg_r15_q[15:0];
+                    5'd16:      reg_to_led = reg_r16_q[15:0];
+                    5'd17:      reg_to_led = reg_r17_q[15:0];
+                    5'd18:      reg_to_led = reg_r18_q[15:0];
+                    5'd19:      reg_to_led = reg_r19_q[15:0];
+                    5'd20:      reg_to_led = reg_r20_q[15:0];
+                    5'd21:      reg_to_led = reg_r21_q[15:0];
+                    5'd22:      reg_to_led = reg_r22_q[15:0];
+                    5'd23:      reg_to_led = reg_r23_q[15:0];
+                    5'd24:      reg_to_led = reg_r24_q[15:0];
+                    5'd25:      reg_to_led = reg_r25_q[15:0];
+                    5'd26:      reg_to_led = reg_r26_q[15:0];
+                    5'd27:      reg_to_led = reg_r27_q[15:0];
+                    5'd28:      reg_to_led = reg_r28_q[15:0];
+                    5'd29:      reg_to_led = reg_r29_q[15:0];
+                    5'd30:      reg_to_led = reg_r30_q[15:0];
+                    5'd31:      reg_to_led = reg_r31_q[15:0];
+                    default :   reg_to_led = 16'h0000;
+                    endcase
+                end
+            1'd1: begin
+                case (sw)
+                    5'd1:       reg_to_led = reg_r1_q[31:16];
+                    5'd2:       reg_to_led = reg_r2_q[31:16];
+                    5'd3:       reg_to_led = reg_r3_q[31:16];
+                    5'd4:       reg_to_led = reg_r4_q[31:16];
+                    5'd5:       reg_to_led = reg_r5_q[31:16];
+                    5'd6:       reg_to_led = reg_r6_q[31:16];
+                    5'd7:       reg_to_led = reg_r7_q[31:16];
+                    5'd8:       reg_to_led = reg_r8_q[31:16];
+                    5'd9:       reg_to_led = reg_r9_q[31:16];
+                    5'd10:      reg_to_led = reg_r10_q[31:16];
+                    5'd11:      reg_to_led = reg_r11_q[31:16];
+                    5'd12:      reg_to_led = reg_r12_q[31:16];
+                    5'd13:      reg_to_led = reg_r13_q[31:16];
+                    5'd14:      reg_to_led = reg_r14_q[31:16];
+                    5'd15:      reg_to_led = reg_r15_q[31:16];
+                    5'd16:      reg_to_led = reg_r16_q[31:16];
+                    5'd17:      reg_to_led = reg_r17_q[31:16];
+                    5'd18:      reg_to_led = reg_r18_q[31:16];
+                    5'd19:      reg_to_led = reg_r19_q[31:16];
+                    5'd20:      reg_to_led = reg_r20_q[31:16];
+                    5'd21:      reg_to_led = reg_r21_q[31:16];
+                    5'd22:      reg_to_led = reg_r22_q[31:16];
+                    5'd23:      reg_to_led = reg_r23_q[31:16];
+                    5'd24:      reg_to_led = reg_r24_q[31:16];
+                    5'd25:      reg_to_led = reg_r25_q[31:16];
+                    5'd26:      reg_to_led = reg_r26_q[31:16];
+                    5'd27:      reg_to_led = reg_r27_q[31:16];
+                    5'd28:      reg_to_led = reg_r28_q[31:16];
+                    5'd29:      reg_to_led = reg_r29_q[31:16];
+                    5'd30:      reg_to_led = reg_r30_q[31:16];
+                    5'd31:      reg_to_led = reg_r31_q[31:16];
+                    default :   reg_to_led = 16'h0000;
+                    endcase
+                end
+            default: reg_to_led = 16'h0000;
+        endcase
     end
 
     assign ra0_value_o = ra0_value_r;
     assign rb0_value_o = rb0_value_r;
-
+    assign led = reg_to_led;
+    assign reg1 = reg_r1_q;
     //-------------------------------------------------------------
     // get_register: Read register file
     //-------------------------------------------------------------
